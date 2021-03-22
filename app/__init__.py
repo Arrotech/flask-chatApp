@@ -1,7 +1,9 @@
+import eventlet  # noqa
 from os import path
 from dotenv import load_dotenv
 from flask import Flask, make_response, jsonify
 from app.extensions import db, bootstrap, login_manager, socketio
+from instance.config import app_config
 
 
 def bad_request(e):
@@ -44,16 +46,13 @@ def internal_server_error(e):
     }), 500)
 
 
-def create_app(config_name=None):
+def create_app(config_name='production'):
 
-    app = Flask(__name__, template_folder='../../../templates',
+    app = Flask(__name__, instance_relative_config=True,
+                template_folder='../../../templates',
                 static_folder='../../../static')
 
-    app.config['SECRET_KEY'] = 'verysecret'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://postgres:postgres20930988@localhost:5432/chat'  # noqa
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['DEBUG'] = True
-    app.config['FLASK_ENV'] = 'development'
+    app.config.from_object(app_config[config_name])
 
     bootstrap.init_app(app)
     db.init_app(app)
