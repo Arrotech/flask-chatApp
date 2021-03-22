@@ -34,7 +34,9 @@ def login():
             if check_password_hash(user.password, form.password.data):
                 login_user(user, remember=form.remember.data)
                 return redirect(url_for('chat_v1.home'))
-        return '<h1>Invalid username or password</h1>'
+        return render_template('login.html',
+                               form=form,
+                               message='Invalid Username or Password')
     return render_template('login.html', form=form)
 
 
