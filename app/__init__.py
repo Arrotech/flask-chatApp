@@ -1,3 +1,4 @@
+import os
 import eventlet  # noqa
 from os import path
 from dotenv import load_dotenv
@@ -52,7 +53,10 @@ def create_app(config_name='production'):
                 template_folder='../../../templates',
                 static_folder='../../../static')
 
-    app.config.from_object(app_config[config_name])
+    if config_name is not None:
+        app.config.from_object(app_config[config_name])
+    else:
+        app.config.from_object(app_config[os.environ.get("FLASK_ENV")])
 
     bootstrap.init_app(app)
     db.init_app(app)
