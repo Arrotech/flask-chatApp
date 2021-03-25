@@ -57,7 +57,7 @@ def signup():
         db.session.add(user)
         db.session.commit()
 
-        return '<h1>New user has been created</h1>'
+        return redirect(url_for('chat_v1.login'))
     return render_template('signup.html', form=form)
 
 
