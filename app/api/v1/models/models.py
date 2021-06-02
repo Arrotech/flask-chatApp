@@ -24,3 +24,16 @@ class User(UserMixin, db.Model):
 
     def __repr__(self):
         return "<User '{}'>".format(self.username)
+
+class ChatHistory(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(50), unique=False)
+    room = db.Column(db.String(500), unique=False)
+    message = db.Column(db.String(500), unique=False)
+
+    def as_dict(self):
+        return {c.key: getattr(self, c.key)
+                for c in inspect(self).mapper.column_attrs}
+    
+    def __repr__(self):
+        return "<ChatHistory '{}', '{}', '{}'>".format(self.username, self.room, self.message)
