@@ -1,12 +1,12 @@
 import time
 from flask import render_template, redirect, url_for
-from flask_socketio import send, join_room, leave_room
+from flask_socketio import send, join_room, leave_room, emit
 from werkzeug.security import check_password_hash
 from flask_login import login_required, login_user, logout_user, current_user
 from app.api.v1 import chat_v1
 from app.extensions import socketio
 from app.api.v1.forms.forms import LoginForm, SignUpForm
-from app.api.v1.models.models import User
+from app.api.v1.models.models import User, ChatHistory
 from app.extensions import db, login_manager
 
 ROOMS = ["backend", "design", "marketting", "leadership", "general"]
@@ -63,7 +63,9 @@ def signup():
 
 @socketio.on('message')
 def on_message(data):
-    print(data)
+    message = ChatHistory(username=data['username'], room=data['room'], message=data['msg'])
+    db.session.add(message)
+    db.session.commit()
     msg = data['msg']
     username = data['username']
     room = data['room']
@@ -78,11 +80,16 @@ def on_message(data):
 
 @socketio.on('join')
 def on_join(data):
+    messages = ChatHistory.query.filter_by(room=data['room'])
+    chat_history = []
+    for message in messages:
+        chat_history.append(message.as_dict())
     username = data['username']
     room = data['room']
     join_room(room)
     send({'msg': username + " has joined the " +
           room + " channel"}, room=room)
+    emit('joined', chat_history)
 
 
 @socketio.on('leave')
