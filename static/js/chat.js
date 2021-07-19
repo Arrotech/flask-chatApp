@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
-    var socket = io.connect('http://' + document.domain + ':' + location.port);
+    // var socket = io.connect('http://' + document.domain + ':' + location.port);
+    var socket = io.connect('https://arrotech-chat-app.herokuapp.com');
 
     const username = document.querySelector('#get-username').innerHTML;
 

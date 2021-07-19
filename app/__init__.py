@@ -1,4 +1,3 @@
-import os
 import eventlet  # noqa
 from os import path
 from dotenv import load_dotenv
@@ -47,16 +46,14 @@ def internal_server_error(e):
     }), 500)
 
 
-def create_app(config_name='production'):
+def create_app(config_name='development'):
 
     app = Flask(__name__, instance_relative_config=True,
                 template_folder='../../../templates',
                 static_folder='../../../static')
 
-    if config_name is not None:
-        app.config.from_object(app_config[config_name])
-    else:
-        app.config.from_object(app_config[os.environ.get("FLASK_ENV")])
+    app.config.from_object(app_config[config_name])
+    app.config.from_pyfile('config.py')
 
     bootstrap.init_app(app)
     db.init_app(app)
