@@ -20,4 +20,4 @@ def create_tables_v1():
 
 
 if __name__ == "__main__":
-    socketio.run(app)
+    app.run()
