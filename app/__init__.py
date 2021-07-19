@@ -59,7 +59,7 @@ def create_app(config_name='development'):
     db.init_app(app)
     login_manager.init_app(app)
     login_manager.login_view = 'chat_v1.login'
-    socketio.init_app(app)
+    socketio.init_app(app, manage_session=False)
 
     from app.api.v1 import chat_v1
 
