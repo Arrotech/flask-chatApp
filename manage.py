@@ -1,14 +1,14 @@
 import os
 import subprocess
 import sys
-from flask import redirect, url_for, make_response, jsonify
+from flask import make_response, jsonify
 from flask_script import Manager, Command
 from flask_migrate import Migrate, MigrateCommand
 
 from app import create_app
 from app.extensions import db
 
-socketio, app = create_app(os.environ.get('FLASK_ENV'))
+app = create_app(os.environ.get('FLASK_ENV', 'development'))
 app.app_context().push()
 
 migrate = Migrate(app, db)
@@ -72,7 +72,6 @@ class Pytest(Command):
                  '--cov-report=term-missing',
                  ] + argv)
             sys.exit(ret)
-
 
 
 manager.add_command('pytest', Pytest())

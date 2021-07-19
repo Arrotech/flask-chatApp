@@ -15,8 +15,7 @@ class Config:
 
     # SQLALCHEMY
     SQLALCHEMY_DATABASE_URI = os.environ.get('DB_URL')
-    SQLALCHEMY_TRACK_MODIFICATIONS = os.environ.get(
-        'SQLALCHEMY_TRACK_MODIFICATIONS')
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # app secret key
     SECRET_KEY = os.environ.get('SECRET_KEY')

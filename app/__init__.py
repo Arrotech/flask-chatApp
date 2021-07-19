@@ -73,4 +73,4 @@ def create_app(config_name='development'):
     basedir = path.abspath(path.dirname(__file__))
     load_dotenv(path.join(basedir, '.env'))
 
-    return socketio, app
+    return app
